@@ -1,0 +1,7 @@
+#!/bin/bash
+#PBS -l nodes=2:ppn=16,walltime=00:15:00
+#PBS -m ae
+#PBS -M cbkeller@princeton.edu
+
+module load openmpi
+mpiexec ./runmelts 37 2>./error.log

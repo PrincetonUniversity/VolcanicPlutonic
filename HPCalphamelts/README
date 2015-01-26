@@ -1,0 +1,15 @@
+This folder contains C source code for running parallel alphamelts simulations to invert for best-fitting P-T paths and initial volatile compositions (runmeltsPath.c, runmelts.h) along with example batch scripts (meltsProduction.pbs, meltsTest.pbs).
+
+In order to run this software, you must first have working installations of MPI (openMPI or MPICH) and alphamelts (available at http://magmasource.caltech.edu/alphamelts/download.php). 
+
+The production batch script is configured to run ~1300 melts simulations per core on 1024 cores of a  distributed-memory linux cluster (default: 64 nodes, with 16 cores per node). The location of the  alphamelts perl script and of the scratch directory in which to run simulations and both hard-coded (line 89 of runmelts.h and line 87 of runmeltsPath, respectively) and must be edited to match your system before compilation.
+
+Compilation:
+$ mpicc -std=c99 -o runmetls runmetlsPath.c
+
+Run 64 melts simulations per core on 16 cores of a desktop workstation:
+$ mpiexec -np 16 ./runmelts 64
+
+Submit job to batch queue for production run:
+$ qsub meltsProduction.pbs
+
