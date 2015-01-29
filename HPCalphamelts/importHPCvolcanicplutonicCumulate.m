@@ -2,7 +2,16 @@ if ~exist('mcvolcanic','var'); load mcvolcanic2; end
 if ~exist('volcanic','var'); load volcanic; end
 if ~exist('mcplutonic','var'); load mcplutonic2; end
 if ~exist('plutonic','var'); load plutonic; end
-
+if ~exist('residuals','var')
+    if ~exist('residuals','file') % If not processed, delete column headers from residuals file
+        [~,~]=unix('grep n residuals.csv > residualcolumns');
+        [~,~]=unix('sed ''/^n/d'' residuals.csv > residuals');
+        [~,~]=unix('rm residuals.csv');
+    end
+    load residuals
+    residuals=sortrows(residuals,2); % Sort by column 2 (least squared residual)
+    residuals(residuals(:,2)==0,:)=[]; % Delete simulations that did not run (residual of zero)
+end
 
 % plotelements={'TiO2','Al2O3','FeOT','Cr','MgO','Ni','Co','CaO','Na2O','K2O','P2O5','H2O_Plus'}; yfigs=3; xfigs=4;
 % plotelements={'CaO';'Al2O3';'FeOT';'MgO';'K2O';'Na2O';'Cr';'TiO2';'P2O5';}; yfigs=3; xfigs=3;
@@ -12,6 +21,7 @@ if ~exist('plutonic','var'); load plutonic; end
 plotelements={'MgO';'FeOT';'Al2O3';'K2O';}; xfigs=2; yfigs=2;
 xmin=40;
 xmax=80;
+nsims=200;
 
 figure;
 for i=1:length(plotelements)
@@ -58,7 +68,7 @@ cmap=hue.*repmat(saturation,1,3);
 
 
 
-for ssim=1:200;
+for ssim=1:nsims;
     dir = ['out' num2str(residuals(ssim,1))];
     melts=struct;
     % Import the results
@@ -76,9 +86,7 @@ for ssim=1:200;
             melts.minerals(i)=name;
         end
         
-        
-        %%%%%%%%%%%%%%%%%%%% Zero-extend mineral masses %%%%%%%%%%%%%%%%%%%
-        
+                
         % Determine minimum and maximum temperature in the simulation
         minT=NaN;
         maxT=NaN;
@@ -135,44 +143,41 @@ for ssim=1:200;
             s.(elem{j}) = s.(elem{j})./mass.solids;
         end
         
-        % Calculate where SiO2 is increasing during differentiation, so as to plot only that
+        % Calculate where SiO2 is increasing during differentiation
         posSi=melts.liquid0.SiO2>([0; melts.liquid0.SiO2(1:end-1)]-0.01); 
 
         %%%%%%%%%%%%%%%%%%%%%%%%%  Plot results  %%%%%%%%%%%%%%%%%%%%%%%%%%
-        plotwater=(nanmean(melts.liquid0.H2O)-0)/4;%+0.2;
-%         plotwater=melts.liquid0.H2O(1)/2;
+        plotwater=(nanmean(melts.liquid0.H2O)-0)/4; % Scale for 0-4% H2O
         if plotwater>1; plotwater=1; end
         if plotwater<0; plotwater=0; end
 
         linecolor=cmap(ceil(plotwater*100),:);
-%         linecolor=[(1-plotwater) 0 plotwater];
                 
-%         cumulatecolor=[0 plotwater 0];
         plotelements=regexprep(plotelements,'H2O_Plus','H2O');
         for i=1:length(plotelements)
             hold on; subaxis(yfigs,xfigs,mod(i-1,xfigs*yfigs)+1); 
             if isequal(plotelements{i},'FeOT')
-                % liquid
+                % melt
                 plot(melts.liquid0.SiO2(posSi).*100./(100-melts.liquid0.H2O(posSi)),melts.liquid0.FeO(posSi).*100./(100-melts.liquid0.H2O(posSi))+melts.liquid0.Fe2O3(posSi).*100./(100-melts.liquid0.H2O(posSi)).*((55.845+16)/(55.845+24)),'Color',linecolor);
-                % solid (color each point individually by melt silica)
+                % cumulate (color each point individually by melt silica)
                 for step=1:length(s.SiO2)
                     if posSi(step)&&mass.solids(step)>0
                         plot((1+0.01*randn(round(mass.solids(20)),1)).*s.SiO2(step),(1+0.01*randn(round(mass.solids(20)),1)).*s.FeO(step)+(1+0.01*randn(round(mass.solids(20)),1)).*s.Fe2O3(step).*((55.845+16)/(55.845+24)),'.','MarkerSize',mass.solids(step),'Color',[0 (melts.liquid0.SiO2(step)-45)/45 0]);
                     end
                 end
             else
-                % liquid
+                % melt
                 plot(melts.liquid0.SiO2(posSi).*100./(100-melts.liquid0.H2O(posSi)),melts.liquid0.(plotelements{i})(posSi).*100./(100-melts.liquid0.H2O(posSi)),'Color',linecolor);
-                % solid (color each point individually by melt silica)
+                % cumulate (color each point individually by melt silica)
                 for step=1:length(s.SiO2)
                     if posSi(step)&&mass.solids(step)>0
                         plot((1+0.01*randn(round(mass.solids(20)),1)).*s.SiO2(step),(1+0.01*randn(round(mass.solids(20)),1)).*s.(plotelements{i})(step),'.','MarkerSize',mass.solids(step),'Color',[0 (melts.liquid0.SiO2(step)-45)/45 0]);
                     end
                 end
             end
-            xlim([xmin xmax])
-            
+            xlim([xmin xmax])            
         end
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     end
 end
 
@@ -194,8 +199,6 @@ end
 plot(melts.liquid0.SiO2, mins)
 legend(melts.minerals{2:end})
 
-
-% figure; plot(s.SiO2); ylabel('SiO_2')
 
 %% Examine mineralogy
 index=40;

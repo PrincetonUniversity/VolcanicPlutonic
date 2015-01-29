@@ -13,3 +13,5 @@ $ mpiexec -np 16 ./runmelts 64
 Submit job to batch queue for production run:
 $ qsub meltsProduction.pbs
 
+
+The three included Matlab scripts are written import and plot the best-fitting MELTS results when run from the directory containing the MELTS output.
