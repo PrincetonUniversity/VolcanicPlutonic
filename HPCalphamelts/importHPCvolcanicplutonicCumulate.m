@@ -1,23 +1,17 @@
-if ~exist('mcvolcanic','var'); load mcvolcanic2; end
-if ~exist('volcanic','var'); load volcanic; end
-if ~exist('mcplutonic','var'); load mcplutonic2; end
-if ~exist('plutonic','var'); load plutonic; end
-if ~exist('residuals','var')
-    if ~exist('residuals','file') % If not processed, delete column headers from residuals file
-        [~,~]=unix('grep n residuals.csv > residualcolumns');
-        [~,~]=unix('sed ''/^n/d'' residuals.csv > residuals');
-        [~,~]=unix('rm residuals.csv');
-    end
-    load residuals
-    residuals=sortrows(residuals,2); % Sort by column 2 (least squared residual)
-    residuals(residuals(:,2)==0,:)=[]; % Delete simulations that did not run (residual of zero)
+if ~exist('mcvolcanic','var'); load mcvolcanicCalcErr; end
+if ~exist('volcanic','var'); load volcanicCalcErr; end
+if ~exist('mcplutonic','var'); load mcplutonicCalcErr; end
+if ~exist('plutonic','var'); load plutonicCalcErr; end
+if ~exist('residuals','file') % If not processed, delete column headers from residuals file
+    [~,~]=unix('grep n residuals.csv > residualcolumns');
+    [~,~]=unix('sed ''/^n/d'' residuals.csv > residuals');
+    [~,~]=unix('rm residuals.csv');
 end
+load residuals
+residuals=sortrows(residuals,2); % Sort by column 2 (least squared residual)
+residuals(residuals(:,2)==0,:)=[]; % Delete simulations that did not run (residual of zero)
 
-% plotelements={'TiO2','Al2O3','FeOT','Cr','MgO','Ni','Co','CaO','Na2O','K2O','P2O5','H2O_Plus'}; yfigs=3; xfigs=4;
 % plotelements={'CaO';'Al2O3';'FeOT';'MgO';'K2O';'Na2O';'Cr';'TiO2';'P2O5';}; yfigs=3; xfigs=3;
-% plotelements={'CaO';'Al2O3';'FeOT';'MgO';'K2O';'Na2O';}; yfigs=2; xfigs=3;
-% plotelements={'K2O','FeOT'}; yfigs=1; xfigs=2
-
 plotelements={'MgO';'FeOT';'Al2O3';'K2O';}; xfigs=2; yfigs=2;
 xmin=40;
 xmax=80;
@@ -33,10 +27,6 @@ for i=1:length(plotelements)
 end
 legend({'Plutonic','Volcanic'})
 
-% cd into directory containing melts results
-load residuals.csv residuals
-residuals=sortrows(residuals,2);
-residuals(residuals(:,2)==0,:)=[];
 
 % Reference mineral compositions
 elem={'SiO2','TiO2','Al2O3','Fe2O3','Cr2O3','FeO','MnO','MgO','NiO','CoO','CaO','Na2O','K2O','P2O5','CO2','H2O'};

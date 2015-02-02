@@ -1,17 +1,16 @@
 %% Import best-fitting simulations into melts(n) struct
-if ~exist('residuals','var')
-    if ~exist('residuals','file') % If not processed, delete column headers from residuals file
-        [~,~]=unix('grep n residuals.csv > residualcolumns');
-        [~,~]=unix('sed ''/^n/d'' residuals.csv > residuals');
-        [~,~]=unix('rm residuals.csv');
-    end
-    load residuals
-    residuals=sortrows(residuals,2); % Sort by column 2 (least squared residual)
-    residuals(residuals(:,2)==0,:)=[]; % Delete simulations that did not run (residual of zero)
+if ~exist('residuals','file') % If not processed, delete column headers from residuals file
+    [~,~]=unix('grep n residuals.csv > residualcolumns');
+    [~,~]=unix('sed ''/^n/d'' residuals.csv > residuals');
+    [~,~]=unix('rm residuals.csv');
 end
+load residuals
+residuals=sortrows(residuals,2); % Sort by column 2 (least squared residual)
+residuals(residuals(:,2)==0,:)=[]; % Delete simulations that did not run (residual of zero)
+
 
 melts=struct;
-nsims=400; % Number of simulations to import
+nsims=350; % Number of simulations to import
 
 for n=1:nsims;
     dir = ['out' num2str(residuals(n,1))];
@@ -96,8 +95,10 @@ for i=1:nsims
     H2Oi(i)=melts(i).liquid0.H2O(1);
 end
 
-figure; hist(H2O,50); xlabel('Average H2O (wt. %)')
-figure; hist(H2Oi,50); xlabel('Initial H2O (wt. %)')
+figure; 
+subaxis(2,2,3); hist(H2O,linspace(0.05,4.95,50)); xlabel('Average H2O (wt. %)')
+% figure; 
+subaxis(2,2,1); hist(H2Oi,linspace(0.05,4.95,50)); xlabel('Initial H2O (wt. %)')
 
 %% Plot histograms of initial and average CO2 content
 CO2=NaN(nsims,1);
@@ -108,8 +109,22 @@ for i=1:nsims
     CO2i(i)=melts(i).liquid0.CO2(1);
 end
 
-figure; hist(CO2,50); xlabel('Average CO2 (wt. %)')
-figure; hist(CO2i,linspace(0.01,0.99,50)); xlabel('Initial CO2 (wt. %)')
+% figure; 
+subaxis(2,2,4); hist(CO2,linspace(0.016,1.485,50)); xlabel('Average CO2 (wt. %)')
+% figure; 
+subaxis(2,2,2); hist(CO2i,linspace(0.016,1.485,50)); xlabel('Initial CO2 (wt. %)')
+
+%% Plot initial H2O and CO2 concentrations from residuals file
+n=500;
+figure; 
+[h,c]=hist(residuals(1:n,3),linspace(0.01,0.99,50));
+subaxis(2,1,1); bar(c,h,1); 
+ylim([0, max(h)]); set(gca,'YTick',[]); xlabel('Initial CO2 (wt. %)')
+[h,c]=hist(residuals(1:n,4),50);
+subaxis(2,1,2); bar(c,h,1); 
+ylim([0, max(h)]); set(gca,'YTick',[]); xlabel('Initial H2O (wt. %)')
+
+
 
 %% Plot Average MgO differentiation line
 SiO2=[];
