@@ -101,9 +101,9 @@ for i=1:nsims
 end
 
 figure; 
-subaxis(2,2,3); hist(H2O,linspace(0.05,4.95,50)); xlabel('Average H2O (wt. %)'); set(gca,'YTick',[]); ylabel('Number of samples')
+subaxis(2,2,3); hist(H2O,linspace(0.05,4.95,50)); xlabel('Average H2O (wt. %)')
 % figure; 
-subaxis(2,2,1); hist(H2Oi,linspace(0.05,4.95,50)); xlabel('Initial H2O (wt. %)');set(gca,'YTick',[]); ylabel('Number of samples')
+subaxis(2,2,1); hist(H2Oi,linspace(0.05,4.95,50)); xlabel('Initial H2O (wt. %)')
 
 %% Plot histograms of initial and average CO2 content
 CO2=NaN(nsims,1);
@@ -115,9 +115,9 @@ for i=1:nsims
 end
 
 % figure; 
-subaxis(2,2,4); hist(CO2,linspace(0.016,1.485,50)); xlabel('Average CO2 (wt. %)'); set(gca,'YTick',[])
+subaxis(2,2,4); hist(CO2,linspace(0.016,1.485,50)); xlabel('Average CO2 (wt. %)')
 % figure; 
-subaxis(2,2,2); hist(CO2i,linspace(0.016,1.485,50)); xlabel('Initial CO2 (wt. %)'); set(gca,'YTick',[])
+subaxis(2,2,2); hist(CO2i,linspace(0.016,1.485,50)); xlabel('Initial CO2 (wt. %)')
 
 %% Plot initial H2O and CO2 concentrations from residuals file
 n=500;
