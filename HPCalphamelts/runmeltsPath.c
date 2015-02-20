@@ -14,12 +14,13 @@
 int main(int argc, char **argv){
 	MPI_Init(&argc, &argv);
 	// Check input arguments
-	if (argc != 2) {
-		printf("USAGE: %s <sims_per_task> \n", argv[0]);
+	if (argc != 3) {
+		printf("USAGE: %s <sims_per_task> <residual_cutoff>\n", argv[0]);
 		exit(1);
 	}
 	// Get number of simulations per MPI task from command-line argument
 	const int sims_per_task = atoi(argv[1]);
+	const double residual_cutoff = atof(argv[2]);
 
 	// Starting composition
 	//SiO2, TiO2, Al2O3, Fe2O3, Cr2O3, FeO, MnO, MgO, NiO, CoO, CaO, Na2O, K2O, P2O5, CO2, H2O
@@ -291,7 +292,7 @@ int main(int argc, char **argv){
 
 		
 		// Copy useful output to current directory
-		if  (minresiduals < 200){ // Recommended general: 200
+		if  (minresiduals < residual_cutoff){ // Recommended general: 200
 			sprintf(cmd_string,"cp -r %s ./", prefix);
 			system(cmd_string);
 		}
