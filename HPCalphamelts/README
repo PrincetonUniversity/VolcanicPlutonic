@@ -1,17 +1,25 @@
 This folder contains C source code for running parallel alphamelts simulations to invert for best-fitting P-T paths and initial volatile compositions (runmeltsPath.c, runmelts.h) along with example batch scripts (meltsProduction.pbs, meltsTest.pbs).
 
-In order to run this software, you must first have working installations of MPI (openMPI or MPICH) and alphamelts (available at http://magmasource.caltech.edu/alphamelts/download.php). 
+In order to run this software, you must first have working installations of MPI and alphamelts. MPI is freely available in the form of two competing open-source distribution - openMPI (http://www.open-mpi.org/) and MPICH (http://www.mpich.org/). Either distribution will be fully compatible with the MPI directives used in this software. Alphamelts is available at http://magmasource.caltech.edu/alphamelts/download.php in the form of a precompiled binary paired with an open-source perl script. 
 
-The production batch script is configured to run ~1300 melts simulations per core on 1024 cores of a  distributed-memory linux cluster (default: 64 nodes, with 16 cores per node). The location of the  alphamelts perl script and of the scratch directory in which to run simulations and both hard-coded (line 89 of runmelts.h and line 87 of runmeltsPath, respectively) and must be edited to match your system before compilation.
+The production batch script is configured to run ~1300 melts simulations per core on 1024 cores of a  distributed-memory linux cluster (default: 64 nodes, with 16 cores per node). The program is designed to run all simulations in a scratch directory, and only copy results to an output directory if the run produces a good least-squares fit (with residual less than the value specified in the residual_cutoff argument). Simulations that exceed the residual cutoff are immediately discarded to reduce filesystem usage. The location of the  alphamelts perl script and of the scratch directory in which to run simulations are both hard-coded (line 89 of runmelts.h and line 87 of runmeltsPath.c, respectively) and must be edited to match your system before compilation. Initial composition and major element path against which to minimize are similarly hard-coded in runmeltsPath.c.
 
-Compilation:
+In an HPC environment, the alphamelts executable and alphamelts perl script should ideally be installed in a directory on a fast networked scratch volume. It is also strongly recommended that the scratch directory in which alphamelts is run should be localized on the local scratch volume of each node (if available) to reduce communication overhead. Since running a single alphamelts simulation involves the generation of over a dozen small configuration and output files, each requiring a filesystem inode, care must be taken to not exceed the inode limitations of your filesystem: a production run generates well over 10^7 inodes, whereas typical inode quotas as of 2015 are on the order of 10^6 (check with your system administrator if unsure). The ideal residual cutoff for a production simulation must be found by trial-and-error with smaller test simulations. However, with the parameters currently use in runmeltsPath, a cutoff of 200 results in ~500 best-fitting results out of 10^6 melts simulations. 
+
+RunmeltsPath must be compiled with an MPI compiler wrapper (mpicc) 
+
 $ mpicc -std=c99 -o runmetls runmetlsPath.c
 
-Run 64 melts simulations per core on 16 cores of a desktop workstation:
-$ mpiexec -np 16 ./runmelts 64
+and run with mpiexec/mpirun. The compiled executable takes two arguments (sims_per_task and <residual_cutoff>).
 
-Submit job to batch queue for production run:
+Usage:
+$ mpiexec -np <number_of_processors> runmelts <sims_per_task> <residual_cutoff>
+
+Run 64 melts simulations per core on 16 cores of a workstation with a residual cutoff of 200:
+$ mpiexec -np 16 ./runmelts 64 200
+
+Submit job to batch queue for production run on HPC system:
 $ qsub meltsProduction.pbs
 
 
-The three included Matlab scripts are written import and plot the best-fitting MELTS results when run from the directory containing the MELTS output.
+The three included Matlab scripts are written to import and plot the best-fitting MELTS results when run from the directory containing the MELTS output. Two included archives contain the results for production runs at fO2=FMQ and fO2=FMQ+1.
