@@ -4,4 +4,4 @@
 #PBS -M cbkeller@princeton.edu
 
 module load openmpi
-mpiexec ./runmelts 37 2>./error.log
+mpiexec ./runmelts 37 200 2>./error.log
