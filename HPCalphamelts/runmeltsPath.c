@@ -24,7 +24,7 @@ int main(int argc, char **argv){
 
 	// Starting composition
 	//SiO2, TiO2, Al2O3, Fe2O3, Cr2O3, FeO, MnO, MgO, NiO, CoO, CaO, Na2O, K2O, P2O5, CO2, H2O
-//	const double sc[16]={51.33, 0.98, 15.70, 0, 0.0582, 8.72, 0.17, 9.48, 0.0202, 0.0052, 9.93, 2.61, 0.88, 0.22, 1.14, 2.48}; // Primitive continental arc basalt, Kelemen 2014 TOG
+	const double sc[16]={51.33, 0.98, 15.70, 0, 0.0582, 8.72, 0.17, 9.48, 0.0202, 0.0052, 9.93, 2.61, 0.88, 0.22, 1.14, 2.48}; // Primitive continental arc basalt, Kelemen 2014 TOG
 	double *ic=malloc(16*sizeof(double)), *icq=malloc(16*sizeof(double));
 
 	// Composition path to fit/minimize to
@@ -293,7 +293,7 @@ int main(int argc, char **argv){
 		
 		// Copy useful output to current directory
 		if  (minresiduals < residual_cutoff){ // Recommended general: 200
-			sprintf(cmd_string,"cp -r %s ./", prefix);
+			sprintf(cmd_string,"cp -r %s ./out%d/", prefix, n);
 			system(cmd_string);
 		}
 		// Clean up scratch directory
