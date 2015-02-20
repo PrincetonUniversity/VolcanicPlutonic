@@ -137,12 +137,10 @@ int main(int argc, char **argv){
 		ic[15]=rand_r(&seed)/(double)RAND_MAX*4;
 
 		// Determine inital fO2
-//		fo2Delta=rand_r(&seed)/((double)RAND_MAX)*2 - 1; // Uniformly distributed between -1 and 1
 		fo2Delta=0;
 
 		// Determine starting pressure
 		r1=rand_r(&seed)/(double)RAND_MAX, r2=rand_r(&seed)/(double)RAND_MAX; //generate two standard uniform variables
-//		n1=sqrt(-2*log(r1))*cos(2*3.1415926535*r2), n2=sqrt(-2*log(r1))*sin(2*3.1415926535*r2); //generate two independant standard gaussian variables
 		Pi=10000+15000*r1, Pf=10000*r2;
 
 		// Configure working directory
@@ -178,7 +176,7 @@ int main(int argc, char **argv){
 		points=(int)ceil((liquidusTemp-700)/(-deltaT));
 
 
-		// Generate x and y vectors
+		// Generate x and y vectors for P-T path
 		absc[0]=0;
 		ordn[0]=NAN;
 		while isnan(ordn[0]){
@@ -282,7 +280,7 @@ int main(int argc, char **argv){
 		}
 		
 		// Print results to command line
-//		printf("%7d\t%8d\t%14.8f\t%15.8f\t%15.8f\t%15.8f\t%20.8f\n", world_rank, n, minresiduals, ic[14], ic[15], fo2Delta, Pi);
+//		printf("%7d\t%8d\t%14.8f\t%15.8f\t%15.8f\t%15.8f\t%20.8f\n", world_rank, n, minresiduals, ic[14], ic[15], fo2Delta, Pi); % with pretty formatting
 		printf("%d\t%d\t%f\t%f\t%f\t%f\t%f\n", world_rank, n, minresiduals, ic[14], ic[15], fo2Delta, Pi);
 
 		sendarrayN[sendArrayIndex]=n;
