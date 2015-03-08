@@ -1,9 +1,9 @@
 % Load all necessary data
-if ~exist('mcvolcanic','var'); load mcvolcanicCalcErr; end
-if ~exist('volcanic','var'); load volcanicCalcErr; end
-if ~exist('mcplutonic','var'); load mcplutonicCalcErr; end
-if ~exist('plutonic','var'); load plutonicCalcErr; end
-if ~exist('p','var'); load partitioncoeffsOrig; end
+if ~exist('mcvolcanic','var'); load mcvolcanic; end
+if ~exist('volcanic','var'); load volcanic; end
+if ~exist('mcplutonic','var'); load mcplutonic; end
+if ~exist('plutonic','var'); load plutonic; end
+if ~exist('p','var'); load partitioncoeffs; end
 if ~exist('residuals','file') % If not processed, delete column headers from residuals file
     [~,~]=unix('grep n residuals.csv > residualcolumns');
     [~,~]=unix('sed ''/^n/d'' residuals.csv > residuals');
