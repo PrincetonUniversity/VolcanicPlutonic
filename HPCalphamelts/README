@@ -1,4 +1,7 @@
-This folder contains C source code for running parallel alphamelts simulations to invert for best-fitting P-T paths and initial volatile compositions (runmeltsPath.c, runmelts.h) along with example batch scripts (meltsProduction.pbs, meltsTest.pbs).
+README                                        March 2015                           C. Brenhin Keller
+
+
+This directory contains C source code for running parallel alphamelts simulations to invert for best-fitting P-T paths and initial volatile compositions (runmeltsPath.c, runmelts.h) along with example batch scripts (meltsProduction.pbs, meltsTest.pbs).
 
 In order to run this software, you must first have working installations of MPI and alphamelts. MPI is freely available in the form of two competing open-source distribution - openMPI (http://www.open-mpi.org/) and MPICH (http://www.mpich.org/). Either distribution will be fully compatible with the MPI directives used in this software. Alphamelts is available at http://magmasource.caltech.edu/alphamelts/download.php in the form of a precompiled binary paired with an open-source perl script. 
 
@@ -22,4 +25,4 @@ Submit job to batch queue for production run on HPC system:
 $ qsub meltsProduction.pbs
 
 
-The three included Matlab scripts are written to import and plot the best-fitting MELTS results when run from the directory containing the MELTS output. Two included archives contain the results for production runs at fO2=FMQ and fO2=FMQ+1.
+The three included Matlab scripts (importHPCvolcanicplutonicData.m, importHPCvolcanicplutonicCumulate.m, and importHPCvolcanicplutonicTraceCumulate.m),  are written to import and plot the best-fitting MELTS results when run from the directory containing the MELTS output. Two included archives contain the results for production runs at fO2=FMQ and fO2=FMQ+1.

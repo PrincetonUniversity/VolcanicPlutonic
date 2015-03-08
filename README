@@ -1,0 +1,56 @@
+README                                        March 2015                           C. Brenhin Keller
+                                                                                         
+                                           VolcanicPlutonic
+
+This distribution contains a set of data and code (mostly Matlab, some C) used to compare the major and trace element geochemistry of volcanic and plutonic whole rock data. All code is released under a GPLv2 open-source license (see LICENSE).
+
+USAGE:
+Most code in this distribution is in the form of simple Matlab scripts and functions, which can be called from the Matlab command prompt or interactively in the Matlab GUI. The only required installation is to add the VolcanicPlutonic folder to your Matlab path. The C code (used to coordinate MELTS simulations) is system-dependent and requires compilation, as discussed in the HPCalphamelts README.
+
+CONTENTS:
+
+montecarloVP.m - Run full bootstrap resampling simulation in parallel. Requires Matlab parallel 
+		 computation toolbox as written, but can be easily modified to run in serial by replacing 
+		 the parfor loop on line 128 with a standard for loop and commenting out the 'Create n 
+		 matlab workers' code on lines 58-66.
+
+mctaskVP.m - A subroutine of montecarloVP responsible for resampling and binning
+
+montecarloVPtest.m - Create a pre-resampled dataset for quick examination of volcanic-plutonic trends
+
+plotmcVolcPlutvariable - Plot trends from the pre-resampled dataset
+
+*.csv.zip - Compressed ASCII files of raw volcanic and plutonic whole-rock data. Delimited by semicolon 
+            (;) to avoid collision with commas in references
+
+screenoutliers*.m - Automatic outlier rejection criteria for volcanic and plutonic data
+
+*.mat - Structs containing whole-rock data, saved in matlab .mat format
+
+functions	[directory]
+    An assortment of common subroutines used by other Matlab scripts in the distribution
+
+geolprov 	[directory]
+    findgeolprov.m - Assigns samples a tectonic setting based on their geographic location
+    geolprov.mat  - A matrix of tectonic settings by latitude and longitude with 0.1 degree 
+		    latitude  resolution and 1/6 degree longitude resolution.
+	
+HPCalphamelts	[directory]
+    Parallel codes written in C using MPI to coordinate many (up to many millions) of MELTS 
+    simulations minimizing to an observed differentiation path to attempt to invert for conditions
+    of differentiation. However, inverted results are model-dependant (based on MELTS) and 
+    potentially nonunique. See HPCalphamelts README.
+
+morb		[directory]
+    morb.csv.zip - Compressed CSV of raw MOR data
+    screenoutliersMORB.m - Automatic outlier rejection criteria for MORB data
+    morb.mat - Screened MORB dataset
+    mcMORB.m - Generate provisional bootstrap-resampled MORB dataset
+
+partition_coefficients	[directory]
+    *.txt - Text files of partition coefficient data downloaded from Geochemical Earth Reference Model
+    importpartitioncoeffs.m - Import partition coefficients from text files
+    convertPartitionCoeffs.m - Fit partition coefficient data as a function of magma SiO2
+    monteCarloFit.m - Subroutine used in partition coefficient fitting
+    partitioncoeffsdataOrig.mat - Struct of imported partition coefficient data
+    partitioncoeffsdata.mat - Struct of fitted partition coefficient data
