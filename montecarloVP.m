@@ -103,7 +103,7 @@ prob=1./((k.*median(5./k))+1);
 tic;
 
 % Number of simulations
-nsims=100;
+nsims=10000;
 
 % Number of variables to run the simulation for
 ndata=30;

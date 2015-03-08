@@ -10,14 +10,8 @@ rift=rift(prob>r);
 sdata=sdata+sdata.*repmat(uncert,size(sdata,1),1).*randn(size(sdata));
 silica=sdata(:,1);
 
-% % Randomize silica over uncertainty interval
-% r=randn(size(sdata(:,1)));
-% silica=sdata(:,2)+r.*sdata(:,1)/2;
 
-% Calculate temporary variables for each of the elements/ratios of interest
-% plotelements={'Zr','Hf','Yb','Rb','Ba','Sr','Eu_Eustar'}; ymax=[700 18 9 270 1300 1200 1.5];
-% plotelements={'FeOT','MgO','Ni','CaO','Al2O3','Na2O','K2O','TiO2'}; ymax=[15 30 1000 14 19 5.3 5.5 3];
-
+% % Parameters for major and trace element data independent of tectonic setting (commented out)
 % param=NaN(size(sdata,1),1,15);
 % param(:,1,1)=sdata(:,2); % FeOT
 % param(:,1,2)=sdata(:,3); % MgO
@@ -35,6 +29,7 @@ silica=sdata(:,1);
 % param(:,1,14)=sdata(:,15); % Sr
 % param(:,1,15)=sdata(:,16); % Eu_Eustar
 
+% Parameters for arc and rift trace and major element monte carlo
 param=NaN(size(sdata,1),1,30);
 param(arc,1,1)=sdata(arc,2); % FeOT
 param(rift,1,2)=sdata(rift,2); % FeOT

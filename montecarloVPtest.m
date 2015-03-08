@@ -1,5 +1,5 @@
 % Produce the the (~10^7 row) monte carlo table out for quick examination
-% with plotmcvariable(s).m
+% with plotmcVolcPlutvariable).m
 
 % Get input data
 name='volcanic';
