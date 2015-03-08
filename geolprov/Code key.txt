@@ -1,0 +1,12 @@
+10 % Accreted Arc
+11 % Island Arc
+12 % Continental Arc
+13 % Collisional orogen
+
+20 % Extensional
+21 % Rift
+22 % Plume
+
+31 % Shield
+32 % Platform
+33 % Basin
