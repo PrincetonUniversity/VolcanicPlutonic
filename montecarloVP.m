@@ -18,7 +18,7 @@ simitemsin={'SiO2';'FeOT';'MgO';'Ni';'CaO';'Al2O3';'Na2O';'K2O';'TiO2';'Zr';'Hf'
 
 %Parameters for each struct to plot
 
-% load morb
+load morb
 % in=morb;
 % % in.k=invweight(morb.Latitude, morb.Longitude, morb.Age);
 % % in.k=invweight(morb.Latitude, morb.Longitude, morb.SiO2*10);
@@ -34,7 +34,6 @@ arc=(in.Geolprov==11|in.Geolprov==12);
 rift=(in.Geolprov==21|in.Geolprov==22)|(in.Geolprov==20&in.Age>180&in.Age<220);
 plotstyle='.r';
 test=in.SiO2>SiO2min & in.SiO2<SiO2max & ~isnan(in.Latitude) & ~isnan(in.Longitude) & in.Elevation>-100;
-
 
 % load plutonic
 % in=plutonic
