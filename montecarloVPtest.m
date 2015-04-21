@@ -2,8 +2,7 @@
 % with plotmcVolcPlutvariable).m
 
 % Get input data
-name='volcanic';
-absoluteErr=1; % Whether the data struct uses absolute vs. relative errors
+name='plutonic';
 eval(['in=' name ';'])
 
 simitems={'Latitude';'Longitude';'Elevation';'Age';'SiO2';'TiO2';'Al2O3';'Fe2O3';'FeO';'FeOT';'MgO';'CaO';'Na2O';'K2O';'P2O5';'MnO';'Loi';'H2O_Plus';'H2O_Minus';'H2O';'La';'Ce';'Pr';'Nd';'Sm';'Eu';'Gd';'Tb';'Dy';'Ho';'Er';'Tm';'Yb';'Lu';'Li';'Be';'B';'C';'CO2';'F';'Cl';'K';'Mg';'Sc';'Ti';'V';'Fe';'Cr';'Co';'Ni';'Cu';'Zn';'Ga';'Zr';'Os';'Rb';'Bi';'I';'Hg';'Nd143_Nd144';'Ba';'Y';'Pb';'D18O';'Te';'Nb';'Sr87_Sr86';'Tl';'Pt';'Sn';'Cd';'As';'Pd';'Sr';'Se';'S';'Au';'Ta';'Mo';'U';'Cs';'Sb';'Ag';'W';'Th';'Re';'Hf';'Ir';'Eustar';'Geolprov'};
@@ -18,9 +17,10 @@ end
 data=data(test,:);
 
 % Construct uncertainty matrix
+absoluteErr=1; % Whether the data struct uses absolute vs. relative errors
 uncertainty=zeros(length(in.SiO2),length(simitems));
 for i=1:length(simitems)
-    uncertainty(:,i)=in.err.(simitems{i});
+    uncertainty(:,i)=in.CalcAbsErr.(simitems{i});
 end
 uncertainty=uncertainty(test,:);
 

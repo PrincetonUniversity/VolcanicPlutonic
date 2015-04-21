@@ -18,8 +18,7 @@ simitemsin={'SiO2';'FeOT';'MgO';'Ni';'CaO';'Al2O3';'Na2O';'K2O';'TiO2';'Zr';'Hf'
 
 %Parameters for each struct to plot
 
-% f1=figure;
-% f2=figure;
+% load morb
 % in=morb;
 % % in.k=invweight(morb.Latitude, morb.Longitude, morb.Age);
 % % in.k=invweight(morb.Latitude, morb.Longitude, morb.SiO2*10);
@@ -29,7 +28,7 @@ simitemsin={'SiO2';'FeOT';'MgO';'Ni';'CaO';'Al2O3';'Na2O';'K2O';'TiO2';'Zr';'Hf'
 % plotstyle='morb';
 % test=in.SiO2>SiO2min & in.SiO2<SiO2max & ~isnan(in.Latitude) & ~isnan(in.Longitude);
 
-
+load volcanic
 in=volcanic;
 arc=(in.Geolprov==11|in.Geolprov==12);
 rift=(in.Geolprov==21|in.Geolprov==22)|(in.Geolprov==20&in.Age>180&in.Age<220);
@@ -37,6 +36,7 @@ plotstyle='.r';
 test=in.SiO2>SiO2min & in.SiO2<SiO2max & ~isnan(in.Latitude) & ~isnan(in.Longitude) & in.Elevation>-100;
 
 
+% load plutonic
 % in=plutonic
 % arc=(in.Geolprov==11|in.Geolprov==12);
 % rift=(in.Geolprov==21|in.Geolprov==22)|(in.Geolprov==20&in.Age>180&in.Age<220);
@@ -56,14 +56,14 @@ end
 
 
 % Create n matlab workers for parallel processing on n cores
-n=4;
-nn=matlabpool('size');
-if nn>0&&nn~=n
-    matlabpool close force local
-    matlabpool(n)
-elseif nn==0
-    matlabpool(n)
-end
+% n=4;
+% nn=matlabpool('size');
+% if nn>0&&nn~=n
+%     matlabpool close force local
+%     matlabpool(n)
+% elseif nn==0
+%     matlabpool(n)
+% end
 
 %% Produce sample weights for bootstrap resamplingaaa
 
@@ -150,9 +150,10 @@ ymax=[15 30 1000 14 19 5.3 5.5 3 700 18 9 270 1300 1200 1.5];
 
 
 %% Plot the results
+f1=figure;
+f2=figure;
 
 % For each item in the simulation output, create a figure with the results
-
 
 if strcmp(plotstyle,'morb')
     figure(f1);
