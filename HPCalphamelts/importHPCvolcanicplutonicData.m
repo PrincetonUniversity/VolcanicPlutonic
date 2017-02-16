@@ -30,7 +30,7 @@ for n=1:nsims;
         end
         
         % Calculate range where SiO2 is increasing during differentiation     
-        melts(n).posSi=melts(n).liquid0.SiO2>([0; melts(n).liquid0.SiO2(1:end-1)]-0.01);      
+        melts(n).posSi=melts(n).liquid_0.SiO2>([0; melts(n).liquid_0.SiO2(1:end-1)]-0.01);      
     end
 end
 
@@ -47,16 +47,16 @@ figure; subaxis(1,2,1,'SpacingHoriz',0.02); hold on;
 set(gca, 'YDir','reverse');
 for n=1:nsims
     % Determine step number at which pressure first reaches minimum value
-    [~,index]=min(melts(n).liquid0.Pressure);
+    [~,index]=min(melts(n).liquid_0.Pressure);
     
-%     normconst=100./(100-melts(n).liquid0.H2O-melts(n).liquid0.CO2); % Calculate volatile-free normalization
+%     normconst=100./(100-melts(n).liquid_0.H2O-melts(n).liquid_0.CO2); % Calculate volatile-free normalization
     normconst=1; % No normalization
     
     % Plot each simulation color-coded by average H2O
-    plotwater=(nanmean(melts(n).liquid0.H2O(1)))*2;%/2-0.4;
+    plotwater=(nanmean(melts(n).liquid_0.H2O(1)))*2;%/2-0.4;
     if plotwater>1; plotwater=1; end
     if plotwater<0; plotwater=0; end
-    plot(melts(n).liquid0.SiO2(1:index).*normconst,melts(n).liquid0.Pressure(1:index)/10000,'Color',cmap(ceil(plotwater*100),:))
+    plot(melts(n).liquid_0.SiO2(1:index).*normconst,melts(n).liquid_0.Pressure(1:index)/10000,'Color',cmap(ceil(plotwater*100),:))
 end
 xlim([50 80])
 ylim([0 2.1])
@@ -72,16 +72,16 @@ set(gca, 'XDir','reverse');
 set(gca, 'YDir','reverse');
 for n=1:nsims
     % Determine step number at which pressure first reaches minimum value
-    [~,index]=min(melts(n).liquid0.Pressure);
+    [~,index]=min(melts(n).liquid_0.Pressure);
     
-%     normconst=100./(100-melts(n).liquid0.H2O-melts(n).liquid0.CO2); % Calculate volatile-free normalization
+%     normconst=100./(100-melts(n).liquid_0.H2O-melts(n).liquid_0.CO2); % Calculate volatile-free normalization
     normconst=1; % No normalization
     
     % Plot each simulation color-coded by average H2O
-    plotwater=(nanmean(melts(n).liquid0.H2O))/4;%/2-0.4;
+    plotwater=(nanmean(melts(n).liquid_0.H2O))/4;%/2-0.4;
     if plotwater>1; plotwater=1; end
     if plotwater<0; plotwater=0; end
-    plot(melts(n).liquid0.Temperature(1:index).*normconst,melts(n).liquid0.Pressure(1:index)/10000,'Color',cmap(ceil(plotwater*100),:))
+    plot(melts(n).liquid_0.Temperature(1:index).*normconst,melts(n).liquid_0.Pressure(1:index)/10000,'Color',cmap(ceil(plotwater*100),:))
 end
 xlim([680 1500])
 ylim([0 2.1])
@@ -96,8 +96,8 @@ H2O=NaN(nsims,1);
 H2Oi=NaN(nsims,1);
 
 for i=1:nsims
-    H2O(i)=nanmean(melts(i).liquid0.H2O(melts(i).posSi));
-    H2Oi(i)=melts(i).liquid0.H2O(1);
+    H2O(i)=nanmean(melts(i).liquid_0.H2O(melts(i).posSi));
+    H2Oi(i)=melts(i).liquid_0.H2O(1);
 end
 
 figure; 
@@ -110,8 +110,8 @@ CO2=NaN(nsims,1);
 CO2i=NaN(nsims,1);
 
 for i=1:nsims
-    CO2(i)=nanmean(melts(i).liquid0.CO2(melts(i).posSi));
-    CO2i(i)=melts(i).liquid0.CO2(1);
+    CO2(i)=nanmean(melts(i).liquid_0.CO2(melts(i).posSi));
+    CO2i(i)=melts(i).liquid_0.CO2(1);
 end
 
 % figure; 
@@ -135,13 +135,13 @@ ylim([0, max(h)]); set(gca,'YTick',[]); xlabel('Initial H2O (wt. %)')
 SiO2=[];
 MgO=[];
 for i=1:nsims
-    SiO2=[SiO2; melts(i).liquid0.SiO2(melts(i).posSi)];
-    MgO=[MgO; melts(i).liquid0.MgO(melts(i).posSi)];
+    SiO2=[SiO2; melts(i).liquid_0.SiO2(melts(i).posSi)];
+    MgO=[MgO; melts(i).liquid_0.MgO(melts(i).posSi)];
     
 end
 
-Mg0=melts(1).liquid0.MgO(1);
-Si0=melts(1).liquid0.SiO2(1);
+Mg0=melts(1).liquid_0.MgO(1);
+Si0=melts(1).liquid_0.SiO2(1);
 
 npoints=25;
 [c, m, e]=bin(SiO2,MgO,Si0,75,0,npoints);

@@ -94,8 +94,8 @@ for ssim=1:nsims
         end
         
         % Determine temperature step
-        if range(melts.liquid0.Temperature(1:end-1)-melts.liquid0.Temperature(2:end))<10^-5
-            deltaT=melts.liquid0.Temperature(1)-melts.liquid0.Temperature(2);
+        if range(melts.liquid_0.Temperature(1:end-1)-melts.liquid_0.Temperature(2:end))<10^-5
+            deltaT=melts.liquid_0.Temperature(1)-melts.liquid_0.Temperature(2);
             simlength=round((maxT-minT)./deltaT)+1;
         else
             error('Non-uniform temperature step');
@@ -178,11 +178,11 @@ for ssim=1:nsims
         
         
         % Calculate trace element compositions
-        meltSi=round(melts.liquid0.SiO2);
+        meltSi=round(melts.liquid_0.SiO2);
         meltSi(meltSi<40)=40; meltSi(meltSi>80)=80;
         
         % Calculate where SiO2 is increasing during differentiation, so as to plot only that
-        posSi=melts.liquid0.SiO2>([0; melts.liquid0.SiO2(1:end-1)]-0.01);
+        posSi=melts.liquid_0.SiO2>([0; melts.liquid_0.SiO2(1:end-1)]-0.01);
         
         for e=1:length(traceelements);
             % Calculate bulk partition coeff.
@@ -198,8 +198,8 @@ for ssim=1:nsims
             end
             
             % Calculate amount of mass removed as solid in each step
-            masssolidFract=([100; mass.liquid0(1:end-1)]-mass.liquid0)/100;
-            solidFract=masssolidFract./[100; mass.liquid0(1:end-1)]*100;
+            masssolidFract=([100; mass.liquid_0(1:end-1)]-mass.liquid_0)/100;
+            solidFract=masssolidFract./[100; mass.liquid_0(1:end-1)]*100;
             
             % Calculate liquid composition
             l.(traceelements{e})=NaN(simlength+1,1);
@@ -211,25 +211,25 @@ for ssim=1:nsims
             
             % Calculate solid composition
             % Mass of element in liquid
-            mEl=l.(traceelements{e}).*[100; mass.liquid0]/100;
+            mEl=l.(traceelements{e}).*[100; mass.liquid_0]/100;
             % Mass of trace element lost at each step
             dmEl=mEl(1:end-1)-mEl(2:end);
             % Concentration in solid
             s.(traceelements{e})=dmEl./masssolidFract;
             
             %%%%%%%%%%%%%%%%%%%%%%%% Plot results %%%%%%%%%%%%%%%%%%%%%%%%%
-            plotwater=(nanmean(melts.liquid0.H2O)-0)/4; %Scale for 0-4% H2O
+            plotwater=(nanmean(melts.liquid_0.H2O)-0)/4; %Scale for 0-4% H2O
             if plotwater>1; plotwater=1; end
             if plotwater<0; plotwater=0; end
             linecolor=cmap(ceil(plotwater*100),:);
             
             hold on; subaxis(yfigs,xfigs,mod(e-1,xfigs*yfigs)+1);
             % melt
-            plot(melts.liquid0.SiO2(posSi),l.(traceelements{e})(logical([posSi; 0])),'Color',linecolor)
+            plot(melts.liquid_0.SiO2(posSi),l.(traceelements{e})(logical([posSi; 0])),'Color',linecolor)
             % cumulate (color each point individually by melt silica)
             for step=1:length(s.SiO2)
                 if posSi(step)&&mass.solids(step)>0
-                    plot(s.SiO2(step),s.(traceelements{e})(step),'.','MarkerSize',mass.solids(step),'Color',[0 (melts.liquid0.SiO2(step)-45)/45 0]);
+                    plot(s.SiO2(step),s.(traceelements{e})(step),'.','MarkerSize',mass.solids(step),'Color',[0 (melts.liquid_0.SiO2(step)-45)/45 0]);
                 end
             end
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

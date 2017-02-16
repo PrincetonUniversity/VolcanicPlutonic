@@ -86,8 +86,8 @@ for ssim=1:nsims;
         end
         
         % Determine temperature step
-        if range(melts.liquid0.Temperature(1:end-1)-melts.liquid0.Temperature(2:end))<10^-5
-            deltaT=melts.liquid0.Temperature(1)-melts.liquid0.Temperature(2);
+        if range(melts.liquid_0.Temperature(1:end-1)-melts.liquid_0.Temperature(2:end))<10^-5
+            deltaT=melts.liquid_0.Temperature(1)-melts.liquid_0.Temperature(2);
             simlength=round((maxT-minT)./deltaT)+1;
         else
             error('Non-uniform temperature step');
@@ -134,10 +134,10 @@ for ssim=1:nsims;
         end
         
         % Calculate where SiO2 is increasing during differentiation
-        posSi=melts.liquid0.SiO2>([0; melts.liquid0.SiO2(1:end-1)]-0.01); 
+        posSi=melts.liquid_0.SiO2>([0; melts.liquid_0.SiO2(1:end-1)]-0.01); 
 
         %%%%%%%%%%%%%%%%%%%%%%%%%  Plot results  %%%%%%%%%%%%%%%%%%%%%%%%%%
-        plotwater=(nanmean(melts.liquid0.H2O)-0)/4; % Scale for 0-4% H2O
+        plotwater=(nanmean(melts.liquid_0.H2O)-0)/4; % Scale for 0-4% H2O
         if plotwater>1; plotwater=1; end
         if plotwater<0; plotwater=0; end
 
@@ -148,20 +148,20 @@ for ssim=1:nsims;
             hold on; subaxis(yfigs,xfigs,mod(i-1,xfigs*yfigs)+1); 
             if isequal(plotelements{i},'FeOT')
                 % melt
-                plot(melts.liquid0.SiO2(posSi).*100./(100-melts.liquid0.H2O(posSi)),melts.liquid0.FeO(posSi).*100./(100-melts.liquid0.H2O(posSi))+melts.liquid0.Fe2O3(posSi).*100./(100-melts.liquid0.H2O(posSi)).*((55.845+16)/(55.845+24)),'Color',linecolor);
+                plot(melts.liquid_0.SiO2(posSi).*100./(100-melts.liquid_0.H2O(posSi)),melts.liquid_0.FeO(posSi).*100./(100-melts.liquid_0.H2O(posSi))+melts.liquid_0.Fe2O3(posSi).*100./(100-melts.liquid_0.H2O(posSi)).*((55.845+16)/(55.845+24)),'Color',linecolor);
                 % cumulate (color each point individually by melt silica)
                 for step=1:length(s.SiO2)
                     if posSi(step)&&mass.solids(step)>0
-                        plot((1+0.01*randn(round(mass.solids(20)),1)).*s.SiO2(step),(1+0.01*randn(round(mass.solids(20)),1)).*s.FeO(step)+(1+0.01*randn(round(mass.solids(20)),1)).*s.Fe2O3(step).*((55.845+16)/(55.845+24)),'.','MarkerSize',mass.solids(step),'Color',[0 (melts.liquid0.SiO2(step)-45)/45 0]);
+                        plot((1+0.01*randn(round(mass.solids(20)),1)).*s.SiO2(step),(1+0.01*randn(round(mass.solids(20)),1)).*s.FeO(step)+(1+0.01*randn(round(mass.solids(20)),1)).*s.Fe2O3(step).*((55.845+16)/(55.845+24)),'.','MarkerSize',mass.solids(step),'Color',[0 (melts.liquid_0.SiO2(step)-45)/45 0]);
                     end
                 end
             else
                 % melt
-                plot(melts.liquid0.SiO2(posSi).*100./(100-melts.liquid0.H2O(posSi)),melts.liquid0.(plotelements{i})(posSi).*100./(100-melts.liquid0.H2O(posSi)),'Color',linecolor);
+                plot(melts.liquid_0.SiO2(posSi).*100./(100-melts.liquid_0.H2O(posSi)),melts.liquid_0.(plotelements{i})(posSi).*100./(100-melts.liquid_0.H2O(posSi)),'Color',linecolor);
                 % cumulate (color each point individually by melt silica)
                 for step=1:length(s.SiO2)
                     if posSi(step)&&mass.solids(step)>0
-                        plot((1+0.01*randn(round(mass.solids(20)),1)).*s.SiO2(step),(1+0.01*randn(round(mass.solids(20)),1)).*s.(plotelements{i})(step),'.','MarkerSize',mass.solids(step),'Color',[0 (melts.liquid0.SiO2(step)-45)/45 0]);
+                        plot((1+0.01*randn(round(mass.solids(20)),1)).*s.SiO2(step),(1+0.01*randn(round(mass.solids(20)),1)).*s.(plotelements{i})(step),'.','MarkerSize',mass.solids(step),'Color',[0 (melts.liquid_0.SiO2(step)-45)/45 0]);
                     end
                 end
             end
@@ -186,7 +186,7 @@ figure; hold on;
 for i=2:length(melts.minerals)
     mins=[mins mass.(melts.minerals{i}) ./ mass.solids];
 end
-plot(melts.liquid0.SiO2, mins)
+plot(melts.liquid_0.SiO2, mins)
 legend(melts.minerals{2:end})
 
 
